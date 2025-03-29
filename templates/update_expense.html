@@ -1,0 +1,18 @@
+{% extends "base2.html" %}
+{% block content %}
+    <h2>Update Expense</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Category:</label>
+        <input type="text" name="category" value="{{ expense.category }}" required>
+        
+        <label>Amount:</label>
+        <input type="number" name="amount" value="{{ expense.amount }}" required>
+        
+        <label>Description:</label>
+        <textarea name="description" required>{{ expense.description }}</textarea>
+        
+        <button type="submit" class="btn btn-primary">Update Expense</button>
+        <a href="{% url 'list_expenses' %}" class="btn btn-danger">Cancel</a>
+    </form>
+{% endblock %}
