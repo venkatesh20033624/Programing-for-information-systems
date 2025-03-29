@@ -69,7 +69,17 @@ class Expense(models.Model):
 
     class Meta:
         app_label = "expenses_app"
+# Ensure Database Tables Exist
+def create_database():
+    with connection.schema_editor() as schema_editor:
+        if "expenses_app_expense" in connection.introspection.table_names():
+            schema_editor.delete_model(Expense)
+        if "expenses_app_users" not in connection.introspection.table_names():
+            schema_editor.create_model(Users)
+        schema_editor.create_model(Expense)
+        print("✅ Updated database tables.")
 
+create_database()
 
 
 # Run Django Server
