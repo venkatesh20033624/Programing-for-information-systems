@@ -51,6 +51,26 @@ settings.configure(
 django.setup()
 
 
+# Define User Model for Authentication
+class Users(models.Model):
+    username = models.CharField(max_length=100, unique=True)
+    password = models.CharField(max_length=255)
+
+    class Meta:
+        app_label = "expenses_app"
+
+# Define Expense Model
+class Expense(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    category = models.CharField(max_length=100)
+    amount = models.FloatField()
+    description = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = "expenses_app"
+
+
 
 # Run Django Server
 if __name__ == "__main__":
