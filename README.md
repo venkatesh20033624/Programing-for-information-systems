@@ -34,3 +34,21 @@ A lightweight Django-based web application that helps users track their personal
 ## 📌 Project Structure
 
 smart_expenses/ ├── app.py # Main Django app logic ├── templates/ # HTML templates ├── static/ # Static assets ├── db.sqlite3 # SQLite database └── venv/ # Virtual environment
+
+
+---
+
+## 🔜 Deployment
+
+This application will soon be deployed on an **AWS EC2 instance** for live access and testing.
+
+---
+
+## 🧑‍💻 Setup Instructions
+
+1. Clone the repository
+2. Create a virtual environment
+3. Install required packages (`pip install django`)
+4. Run the server:  
+   ```bash
+   python app.py runserver 0.0.0.0:8000
