@@ -1,0 +1,14 @@
+{% extends 'base2.html' %}
+{% block content %}
+<h2>Add Expense</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Category:</label>
+    <input type="text" name="category" required>
+    <label>Amount:</label>
+    <input type="number" name="amount" required>
+    <label>Description:</label>
+    <textarea name="description"></textarea>
+    <button type="submit">Add Expense</button>
+</form>
+{% endblock %}
