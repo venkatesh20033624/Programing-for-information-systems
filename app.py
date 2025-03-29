@@ -49,3 +49,10 @@ settings.configure(
 
 # Initialize Django
 django.setup()
+
+
+
+# Run Django Server
+if __name__ == "__main__":
+    execute_from_command_line(["manage.py", "migrate", "sessions"])
+    execute_from_command_line(["manage.py", "runserver","0.0.0.0:8000"])
