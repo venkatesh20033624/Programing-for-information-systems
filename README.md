@@ -33,3 +33,4 @@ A lightweight Django-based web application that helps users track their personal
 
 ## 📌 Project Structure
 
+smart_expenses/ ├── app.py # Main Django app logic ├── templates/ # HTML templates ├── static/ # Static assets ├── db.sqlite3 # SQLite database └── venv/ # Virtual environment
