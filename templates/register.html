@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="register-container">
+        <h2>Welcome to Smart Expenses Tracker</h2>
+        <p>Create an account to start tracking your expenses.</p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" class="register-form">
+            {% csrf_token %}
+            <label>Username:</label>
+            <input type="text" name="username" placeholder="Choose a username" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" placeholder="Create a password" required>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+
+        <p class="login-link">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    </div>
+{% endblock %}
