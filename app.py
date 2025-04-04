@@ -82,6 +82,53 @@ def create_database():
 create_database()
 
 
+# Authentication Views
+def register(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        if Users.objects.filter(username=username).exists():
+            return render(request, "register.html", {"error": "Username already exists."})
+
+        hashed_password = make_password(password)
+        Users.objects.create(username=username, password=hashed_password)
+
+        return redirect("login")
+
+    return render(request, "register.html")
+
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = Users.objects.filter(username=username).first()
+
+        if user and check_password(password, user.password):
+            request.session["user_id"] = user.id
+            return redirect("list_expenses")
+
+        return render(request, "login.html", {"error": "Invalid username or password."})
+
+    return render(request, "login.html")
+
+def user_logout(request):
+    request.session.flush()
+    return redirect("login")
+
+# Expense Views
+def index(request):
+    return render(request, "index.html")
+
+def list_expenses(request):
+    if "user_id" not in request.session:
+        return redirect("login")
+    user_id = request.session["user_id"]
+    expenses = Expense.objects.filter(user_id=user_id).order_by("-date")
+    return render(request, "list_expenses.html", {"expenses": expenses})
+
+
 # Run Django Server
 if __name__ == "__main__":
     execute_from_command_line(["manage.py", "migrate", "sessions"])
