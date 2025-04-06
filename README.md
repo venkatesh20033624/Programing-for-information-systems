@@ -52,3 +52,5 @@ This application will soon be deployed on an **AWS EC2 instance** for live acces
 4. Run the server:  
    ```bash
    python app.py runserver 0.0.0.0:8000
+
+   
