@@ -50,7 +50,6 @@ settings.configure(
 # Initialize Django
 django.setup()
 
-
 # Define User Model for Authentication
 class Users(models.Model):
     username = models.CharField(max_length=100, unique=True)
@@ -69,6 +68,7 @@ class Expense(models.Model):
 
     class Meta:
         app_label = "expenses_app"
+
 # Ensure Database Tables Exist
 def create_database():
     with connection.schema_editor() as schema_editor:
@@ -80,7 +80,6 @@ def create_database():
         print("✅ Updated database tables.")
 
 create_database()
-
 
 # Authentication Views
 def register(request):
@@ -128,9 +127,50 @@ def list_expenses(request):
     expenses = Expense.objects.filter(user_id=user_id).order_by("-date")
     return render(request, "list_expenses.html", {"expenses": expenses})
 
+def add_expense(request):
+    if "user_id" not in request.session:
+        return redirect("login")
+    if request.method == "POST":
+        category = request.POST.get("category")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        user = Users.objects.get(id=request.session["user_id"])
+        Expense.objects.create(user=user, category=category, amount=amount, description=description)
+        return redirect("list_expenses")
+    return render(request, "add_expense.html")
+
+def update_expense(request, expense_id):
+    if "user_id" not in request.session:
+        return redirect("login")
+    expense = get_object_or_404(Expense, id=expense_id, user_id=request.session["user_id"])
+    if request.method == "POST":
+        expense.category = request.POST.get("category")
+        expense.amount = request.POST.get("amount")
+        expense.description = request.POST.get("description")
+        expense.save()
+        return redirect("list_expenses")
+    return render(request, "update_expense.html", {"expense": expense})
+
+def delete_expense(request, expense_id):
+    if "user_id" not in request.session:
+        return redirect("login")
+    expense = get_object_or_404(Expense, id=expense_id, user_id=request.session["user_id"])
+    expense.delete()
+    return redirect("list_expenses")
+
+# Define URL Routes
+urlpatterns = [
+    path("", index, name="index"),
+    path("register/", register, name="register"),
+    path("login/", user_login, name="login"),
+    path("logout/", user_logout, name="logout"),
+    path("expenses/", list_expenses, name="list_expenses"),
+    path("add-expense/", add_expense, name="add_expense"),
+    path("delete-expense/<int:expense_id>/", delete_expense, name="delete_expense"),
+    path("update-expense/<int:expense_id>/", update_expense, name="update_expense"),
+]
 
 # Run Django Server
 if __name__ == "__main__":
     execute_from_command_line(["manage.py", "migrate", "sessions"])
     execute_from_command_line(["manage.py", "runserver","0.0.0.0:8000"])
-    
